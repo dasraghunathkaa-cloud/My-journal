@@ -1,0 +1,1101 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Mission 270: Daily Monk Mode Journal</title>
+    
+    <!-- PWA iOS Specific Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mission 270">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2225%22 fill=%22%230f0f0f%22/><text y=%2262%22 x=%2250%22 font-family=%22sans-serif%22 font-size=%2240%22 font-weight=%22bold%22 fill=%22%23deff9a%22 text-anchor=%22middle%22>270</text></svg>">
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f7fee7',
+                            100: '#ecfccb',
+                            300: '#deff9a', /* Core Accent Lime */
+                            400: '#a8d64d',
+                            500: '#84cc16',
+                            900: '#1e293b',
+                        },
+                        darkBg: '#050505',
+                        panelBg: '#0f0f0f',
+                        borderBg: '#222222',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Urbanist', sans-serif;
+            background-color: #050505;
+            color: #e5e5e5;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        h1, h2, h3, h4, .title-font {
+            font-family: 'Poppins', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+            border-radius: 3px;
+        }
+        @media all and (display-mode: standalone) {
+            header {
+                padding-top: 24px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-20 md:pb-0">
+
+    <!-- Header -->
+    <header class="border-b border-borderBg bg-panelBg/90 backdrop-blur sticky top-0 z-50 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="h-10 w-10 rounded-xl bg-brand-300 flex items-center justify-center text-black font-extrabold text-lg shadow-[0_0_15px_rgba(222,255,154,0.4)]">
+                    270
+                </div>
+                <div>
+                    <h1 class="text-base md:text-lg font-bold tracking-wider text-white leading-none">MISSION 270</h1>
+                    <p class="text-[10px] text-brand-300 tracking-widest font-semibold uppercase">MONK MODE DIGITAL PLATFORM</p>
+                </div>
+            </div>
+
+            <!-- Header metrics -->
+            <div class="hidden md:flex items-center space-x-6 text-sm">
+                <div>
+                    <span class="text-gray-500">Progress:</span>
+                    <span class="font-bold text-white" id="header-progress-text">0 / 270 Days</span>
+                </div>
+                <div class="h-4 w-px bg-borderBg"></div>
+                <div>
+                    <span class="text-gray-500">Streak:</span>
+                    <span class="font-bold text-brand-300" id="header-streak-text">0 Days</span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <!-- Backup actions -->
+                <button onclick="exportBackup()" class="p-2 rounded-lg border border-borderBg text-gray-400 hover:text-white transition text-xs" title="Export Backup">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+                <button onclick="switchTab('settings')" class="p-2 rounded-lg border border-borderBg text-gray-400 hover:text-white transition text-xs">
+                    <i class="fa-solid fa-cog"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-3 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left Column: Permanent Monk Mode Dashboard parameters (4 columns) -->
+        <section class="lg:col-span-4 space-y-6">
+            
+            <!-- Cover Art & Custom Photo -->
+            <div class="bg-panelBg border border-borderBg rounded-2xl overflow-hidden relative shadow-lg">
+                <div class="h-48 relative bg-neutral-950 overflow-hidden">
+                    <img id="cover-photo" src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80" alt="Journal Cover" class="w-full h-full object-cover opacity-50">
+                    <div class="absolute inset-0 bg-gradient-to-t from-panelBg via-transparent to-transparent"></div>
+                    
+                    <div class="absolute top-4 left-4 right-4 flex justify-between items-start">
+                        <span class="text-[10px] font-extrabold uppercase bg-black/60 text-brand-300 border border-brand-300/30 px-2.5 py-1 rounded-full">
+                            1 July 2026 ➔ 31 March 2027
+                        </span>
+                    </div>
+
+                    <label class="absolute bottom-3 right-3 bg-black/85 border border-borderBg text-[11px] px-2.5 py-1.5 rounded-lg cursor-pointer text-gray-300 hover:text-white transition flex items-center space-x-1">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>Change Photo</span>
+                        <input type="file" id="cover-image-input" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+                    </label>
+                </div>
+                
+                <div class="p-5 space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-chess-king text-brand-300 text-2xl"></i>
+                        <h2 class="text-xl font-bold text-white">MISSION 270</h2>
+                    </div>
+                    <p class="text-xs text-brand-300 italic">"The pain you feel today will be the strength you feel tomorrow."</p>
+                    
+                    <!-- Goal blocks -->
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-darkBg p-2.5 rounded-xl border border-borderBg">
+                            <span class="text-gray-500 block">EXAM TARGET</span>
+                            <span class="font-bold text-white">CRACK GOVT EXAM</span>
+                        </div>
+                        <div class="bg-darkBg p-2.5 rounded-xl border border-borderBg">
+                            <span class="text-gray-500 block">WEIGHT TARGET</span>
+                            <span class="font-bold text-white">REACH 75 - 80 KG</span>
+                        </div>
+                        <div class="bg-darkBg p-2.5 rounded-xl border border-borderBg col-span-2 text-center">
+                            <span class="text-gray-500 block">PHYSIQUE</span>
+                            <span class="font-bold text-brand-300">BUILD ATHLETIC PHYSIQUE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rules of the game -->
+            <div class="bg-panelBg border border-borderBg rounded-2xl p-5 space-y-3">
+                <h3 class="text-xs font-bold tracking-widest text-gray-400 uppercase flex items-center space-x-2">
+                    <i class="fa-solid fa-gavel text-brand-300"></i>
+                    <span>Rules of the Game</span>
+                </h3>
+                <ul class="space-y-2 text-xs text-gray-300">
+                    <li class="flex items-start space-x-2"><span class="text-brand-300">•</span> <span><strong>NO EXCUSES:</strong> Consistency over immediate perfection.</span></li>
+                    <li class="flex items-start space-x-2"><span class="text-brand-300">•</span> <span><strong>NO ZERO DAYS:</strong> Do some progress on gym/study every day.</span></li>
+                    <li class="flex items-start space-x-2"><span class="text-brand-300">•</span> <span><strong>PROGRESS > PERFECTION:</strong> Fall down, get up instantly.</span></li>
+                    <li class="flex items-start space-x-2"><span class="text-brand-300">•</span> <span><strong>DISCIPLINE = FREEDOM:</strong> Protect daily habits rigidly.</span></li>
+                </ul>
+            </div>
+
+            <!-- Target Weight Table -->
+            <div class="bg-panelBg border border-borderBg rounded-2xl p-4 space-y-3">
+                <h3 class="text-xs font-bold tracking-widest text-gray-400 uppercase flex items-center space-x-2">
+                    <i class="fa-solid fa-weight-scale text-brand-300"></i>
+                    <span>Monthly Weight Goals</span>
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-[11px] text-gray-400">
+                        <thead>
+                            <tr class="border-b border-borderBg text-gray-500">
+                                <th class="pb-1.5">Month</th>
+                                <th class="pb-1.5 text-right">Target Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-borderBg/40">
+                            <tr><td class="py-1">July 2026</td><td class="py-1 text-right font-semibold text-white">97 - 98 kg</td></tr>
+                            <tr><td class="py-1">Aug 2026</td><td class="py-1 text-right font-semibold text-white">94 - 95 kg</td></tr>
+                            <tr><td class="py-1">Sept 2026</td><td class="py-1 text-right font-semibold text-white">91 - 92 kg</td></tr>
+                            <tr><td class="py-1">Oct 2026</td><td class="py-1 text-right font-semibold text-white">88 - 89 kg</td></tr>
+                            <tr><td class="py-1">Nov 2026</td><td class="py-1 text-right font-semibold text-white">85 - 86 kg</td></tr>
+                            <tr><td class="py-1">Dec 2026</td><td class="py-1 text-right font-semibold text-white">82 - 84 kg</td></tr>
+                            <tr><td class="py-1">Jan 2027</td><td class="py-1 text-right font-semibold text-white">80 - 82 kg</td></tr>
+                            <tr><td class="py-1">Feb 2027</td><td class="py-1 text-right font-semibold text-white">78 - 80 kg</td></tr>
+                            <tr><td class="py-1">Mar 2027</td><td class="py-1 text-right font-semibold text-brand-300">75 - 78 kg</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Right Column: Interactive Logging & Sheets (8 columns) -->
+        <section class="lg:col-span-8 space-y-6">
+            
+            <!-- Main Navigation tabs -->
+            <div class="bg-panelBg border border-borderBg p-1 rounded-xl flex items-center space-x-1 shadow-md">
+                <button onclick="switchTab('grid')" id="tab-btn-grid" class="flex-1 py-2 rounded-lg font-semibold text-xs transition-all flex items-center justify-center space-x-1.5 bg-neutral-900 text-brand-300 shadow">
+                    <i class="fa-solid fa-border-all"></i>
+                    <span>270 Days Progress</span>
+                </button>
+                <button onclick="switchTab('journal')" id="tab-btn-journal" class="flex-1 py-2 rounded-lg font-semibold text-xs transition-all flex items-center justify-center space-x-1.5 text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>Active Planner</span>
+                </button>
+                <button onclick="switchTab('analytics')" id="tab-btn-analytics" class="flex-1 py-2 rounded-lg font-semibold text-xs transition-all flex items-center justify-center space-x-1.5 text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Performance</span>
+                </button>
+            </div>
+
+            <!-- VIEW 1: PROGRESS GRID -->
+            <div id="tab-grid" class="space-y-6">
+                <div class="bg-panelBg border border-borderBg p-5 rounded-2xl">
+                    <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                        <h3 class="font-bold text-white text-sm uppercase tracking-wider">Select Active Day Tracker</h3>
+                        <div class="flex space-x-1">
+                            <button onclick="filterPhase('all')" id="phase-btn-all" class="px-2.5 py-1 rounded bg-brand-300 text-black text-[10px] font-bold">All</button>
+                            <button onclick="filterPhase('p1')" id="phase-btn-p1" class="px-2.5 py-1 rounded bg-neutral-900 text-gray-400 hover:text-white text-[10px]">P1 (1-90)</button>
+                            <button onclick="filterPhase('p2')" id="phase-btn-p2" class="px-2.5 py-1 rounded bg-neutral-900 text-gray-400 hover:text-white text-[10px]">P2 (91-180)</button>
+                            <button onclick="filterPhase('p3')" id="phase-btn-p3" class="px-2.5 py-1 rounded bg-neutral-900 text-gray-400 hover:text-white text-[10px]">P3 (181-270)</button>
+                        </div>
+                    </div>
+
+                    <!-- Scrollable Grid container matching user's 270 checklist circles -->
+                    <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2 max-h-[420px] overflow-y-auto pr-1" id="days-grid-container">
+                        <!-- Filled dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 2: FULL CHECKLIST PLANNER (Exact layout of the user's paper sheet) -->
+            <div id="tab-journal" class="hidden space-y-6">
+                <div class="bg-panelBg border border-borderBg p-5 rounded-2xl relative">
+                    
+                    <!-- Header -->
+                    <div class="flex flex-wrap items-center justify-between border-b border-borderBg pb-4 gap-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="h-12 w-12 bg-brand-300/10 border border-brand-300/30 text-brand-300 rounded-xl flex flex-col items-center justify-center font-bold">
+                                <span class="text-[9px] leading-none">DAY</span>
+                                <span class="text-xl leading-none font-extrabold" id="active-day-num">1</span>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-white">Daily Execution Blueprint</h3>
+                                <p class="text-xs text-gray-400" id="active-day-date">Thursday, July 9, 2026</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <button onclick="navigateDay(-1)" class="px-3 py-1.5 rounded-lg bg-darkBg text-xs text-gray-400 hover:text-white border border-borderBg"><i class="fa-solid fa-chevron-left"></i></button>
+                            <span class="text-[10px] text-gray-500 font-bold px-2">Navigate</span>
+                            <button onclick="navigateDay(1)" class="px-3 py-1.5 rounded-lg bg-darkBg text-xs text-gray-400 hover:text-white border border-borderBg"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Grid Layout matching paper planner -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+                        
+                        <!-- 1. MORNING ROUTINE -->
+                        <div class="bg-darkBg/50 p-4 rounded-xl border border-borderBg/80 space-y-2.5">
+                            <h4 class="text-xs font-bold text-brand-300 uppercase tracking-wider flex items-center space-x-2">
+                                <i class="fa-solid fa-cloud-sun"></i>
+                                <span>1. Morning Routine</span>
+                            </h4>
+                            <div class="space-y-2 text-xs">
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="morn-wake" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Wake up (5:30 AM)</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="morn-eltroxin" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Eltroxin 100 mg</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="morn-water" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Drink 500 ml Water</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="morn-weight" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Weight (Sunday Only)</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="morn-stretch" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Stretching / Mobility</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 2. STUDY PLAN -->
+                        <div class="bg-darkBg/50 p-4 rounded-xl border border-borderBg/80 space-y-2.5">
+                            <h4 class="text-xs font-bold text-brand-300 uppercase tracking-wider flex items-center space-x-2">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                <span>2. Study Plan</span>
+                            </h4>
+                            <div class="space-y-2 text-xs">
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="study-s1" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Study Session 1 (4:30 - 7:30 AM)</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="study-s2" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Study Session 2 (2:00 - 5:00 PM)</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="study-s3" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Study Session 3 (5:30 - 8:00 PM)</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="study-rev" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Revision / MCQs / PYQs</span>
+                                </label>
+                                <div class="pt-1">
+                                    <label class="block text-[10px] text-gray-500 uppercase font-bold mb-1">Topics Studied / Notes:</label>
+                                    <textarea id="study-topics" placeholder="Topics studied today..." class="w-full bg-black border border-borderBg rounded-lg p-2 text-xs text-white resize-none h-14" oninput="autoSaveCurrentDay()"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. GYM & ACTIVITY -->
+                        <div class="bg-darkBg/50 p-4 rounded-xl border border-borderBg/80 space-y-2.5">
+                            <h4 class="text-xs font-bold text-brand-300 uppercase tracking-wider flex items-center space-x-2">
+                                <i class="fa-solid fa-dumbbell"></i>
+                                <span>3. Gym & Activity</span>
+                            </h4>
+                            <div class="space-y-2 text-xs">
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="gym-workout" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Workout (8:00 - 10:00 AM)</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="gym-strength" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Strength Training Done</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="gym-cardio" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Cardio / Incline Walk</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="gym-steps" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>10,000 Steps Completed</span>
+                                </label>
+                                <div class="pt-1">
+                                    <label class="block text-[10px] text-gray-500 uppercase font-bold mb-1">Workout Notes / PRs:</label>
+                                    <input type="text" id="gym-notes" placeholder="e.g. Squat 100kg" class="w-full bg-black border border-borderBg rounded-lg p-2 text-xs text-white" oninput="autoSaveCurrentDay()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. NUTRITION -->
+                        <div class="bg-darkBg/50 p-4 rounded-xl border border-borderBg/80 space-y-2.5">
+                            <h4 class="text-xs font-bold text-brand-300 uppercase tracking-wider flex items-center space-x-2">
+                                <i class="fa-solid fa-utensils"></i>
+                                <span>4. Nutrition & Meals</span>
+                            </h4>
+                            <div class="space-y-2 text-xs">
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="nut-whey" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Whey Protein</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="nut-creatine" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Creatine (3g)</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="nut-protein" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>120g Protein Achieved</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="nut-calories" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Calories (1400 - 1600 kcal)</span>
+                                </label>
+                                <div class="grid grid-cols-2 gap-2 pt-1">
+                                    <input type="text" id="meal-1" placeholder="Meal 1 (Lunch)" class="bg-black border border-borderBg rounded-lg p-2 text-xs text-white" oninput="autoSaveCurrentDay()">
+                                    <input type="text" id="meal-2" placeholder="Meal 2 (Dinner)" class="bg-black border border-borderBg rounded-lg p-2 text-xs text-white" oninput="autoSaveCurrentDay()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. SPIRITUAL & 6. DIGITAL DISCIPLINE -->
+                        <div class="bg-darkBg/50 p-4 rounded-xl border border-borderBg/80 space-y-3">
+                            <h4 class="text-xs font-bold text-brand-300 uppercase tracking-wider flex items-center space-x-2">
+                                <i class="fa-solid fa-om"></i>
+                                <span>5. Spiritual</span>
+                            </h4>
+                            <div class="space-y-2 text-xs">
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="spir-puja" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Puja (11:00 AM - 1:00 PM)</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="spir-naam" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Naam Jap</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="spir-gratitude" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Gratitude</span>
+                                </label>
+                            </div>
+
+                            <h4 class="text-xs font-bold text-brand-300 uppercase tracking-wider pt-2 flex items-center space-x-2">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                                <span>6. Digital Discipline</span>
+                            </h4>
+                            <div class="space-y-2 text-xs">
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="dig-no-social" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>No Social Media (Full Block)</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="dig-smartphone" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Smartphone &lt; 2 Hours</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 7. NIGHT ROUTINE -->
+                        <div class="bg-darkBg/50 p-4 rounded-xl border border-borderBg/80 space-y-2.5">
+                            <h4 class="text-xs font-bold text-brand-300 uppercase tracking-wider flex items-center space-x-2">
+                                <i class="fa-solid fa-moon"></i>
+                                <span>7. Night Routine</span>
+                            </h4>
+                            <div class="space-y-2 text-xs">
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="night-dinner" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Dinner (7:00 - 8:00 PM)</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="night-walk" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Light Walk</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="night-rev" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Revision / Reading</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="night-plan" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Plan for Tomorrow</span>
+                                </label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" id="night-sleep" class="rounded accent-brand-300" onchange="autoSaveCurrentDay()">
+                                    <span>Sleep by 10:00 PM</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- TODAY'S METRICS & CORE LOGS -->
+                        <div class="bg-darkBg/50 p-4 rounded-xl border border-borderBg/80 space-y-3 md:col-span-2">
+                            <h4 class="text-xs font-bold text-brand-300 uppercase tracking-wider flex items-center space-x-2">
+                                <i class="fa-solid fa-chart-bar"></i>
+                                <span>Today's Metrics</span>
+                            </h4>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                                <div>
+                                    <label class="block text-gray-500 mb-1">Weight (kg)</label>
+                                    <input type="number" step="0.1" id="met-weight" class="w-full bg-black border border-borderBg rounded-lg p-2 text-white" oninput="autoSaveCurrentDay()">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-500 mb-1">Waist (cm)</label>
+                                    <input type="number" step="0.1" id="met-waist" class="w-full bg-black border border-borderBg rounded-lg p-2 text-white" oninput="autoSaveCurrentDay()">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-500 mb-1">Steps Taken</label>
+                                    <input type="number" id="met-steps" class="w-full bg-black border border-borderBg rounded-lg p-2 text-white" oninput="autoSaveCurrentDay()">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-500 mb-1">Study Hours</label>
+                                    <input type="number" step="0.1" id="met-study-hrs" class="w-full bg-black border border-borderBg rounded-lg p-2 text-white" oninput="autoSaveCurrentDay()">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-500 mb-1">Water Intake (L)</label>
+                                    <input type="number" step="0.1" id="met-water" class="w-full bg-black border border-borderBg rounded-lg p-2 text-white" oninput="autoSaveCurrentDay()">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-500 mb-1">Calories Intake</label>
+                                    <input type="number" id="met-calories" class="w-full bg-black border border-borderBg rounded-lg p-2 text-white" oninput="autoSaveCurrentDay()">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-500 mb-1">Discipline Score</label>
+                                    <select id="met-discipline" class="w-full bg-black border border-borderBg rounded-lg p-2 text-brand-300 font-bold" onchange="autoSaveCurrentDay()">
+                                        <option value="10">10 / 10</option>
+                                        <option value="9">9 / 10</option>
+                                        <option value="8">8 / 10</option>
+                                        <option value="7">7 / 10</option>
+                                        <option value="6">6 / 10</option>
+                                        <option value="5">5 / 10</option>
+                                        <option value="4">4 / 10</option>
+                                        <option value="3">3 / 10</option>
+                                        <option value="2">2 / 10</option>
+                                        <option value="1">1 / 10</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-500 mb-1">Sleep (Hours)</label>
+                                    <input type="number" step="0.5" id="met-sleep" class="w-full bg-black border border-borderBg rounded-lg p-2 text-white" oninput="autoSaveCurrentDay()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TODAY'S TOP 3 PRIORITIES & REFLECTIONS -->
+                        <div class="bg-darkBg/50 p-4 rounded-xl border border-borderBg/80 space-y-3 md:col-span-2">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <h4 class="text-xs font-bold text-white uppercase">Today's Top 3 Priorities</h4>
+                                    <input type="text" id="prio-1" placeholder="Priority 1" class="w-full bg-black border border-borderBg rounded-lg p-2 text-xs text-white" oninput="autoSaveCurrentDay()">
+                                    <input type="text" id="prio-2" placeholder="Priority 2" class="w-full bg-black border border-borderBg rounded-lg p-2 text-xs text-white" oninput="autoSaveCurrentDay()">
+                                    <input type="text" id="prio-3" placeholder="Priority 3" class="w-full bg-black border border-borderBg rounded-lg p-2 text-xs text-white" oninput="autoSaveCurrentDay()">
+                                </div>
+                                <div class="space-y-2">
+                                    <h4 class="text-xs font-bold text-white uppercase">Notes / Reflections</h4>
+                                    <textarea id="reflection-box" placeholder="Your reflections or journal entries for today..." class="w-full bg-black border border-borderBg rounded-lg p-2 text-xs text-white h-[110px] resize-none" oninput="autoSaveCurrentDay()"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Footer Complete Button -->
+                    <div class="mt-6 flex justify-between items-center border-t border-borderBg pt-4">
+                        <span id="save-status" class="text-xs text-gray-500">Saved in memory</span>
+                        <button onclick="markDayCompleted()" id="complete-day-btn" class="px-5 py-2.5 bg-brand-300 text-black text-xs font-black rounded-lg uppercase tracking-wider hover:bg-brand-400 shadow-md transition">
+                            Save & Complete Day
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- VIEW 3: PERFORMANCE GRAPH -->
+            <div id="tab-analytics" class="hidden space-y-6">
+                <!-- Overview panel -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-panelBg border border-borderBg p-4 rounded-xl">
+                        <span class="text-xs text-gray-500 block uppercase">Gym sessions</span>
+                        <h4 id="perf-gym-count" class="text-2xl font-bold text-brand-300 mt-1">0 Days</h4>
+                    </div>
+                    <div class="bg-panelBg border border-borderBg p-4 rounded-xl">
+                        <span class="text-xs text-gray-500 block uppercase">10+ Hrs Study Days</span>
+                        <h4 id="perf-study-count" class="text-2xl font-bold text-blue-400 mt-1">0 Days</h4>
+                    </div>
+                    <div class="bg-panelBg border border-borderBg p-4 rounded-xl">
+                        <span class="text-xs text-gray-500 block uppercase">Average Discipline</span>
+                        <h4 id="perf-avg-discipline" class="text-2xl font-bold text-yellow-400 mt-1">0 / 10</h4>
+                    </div>
+                </div>
+
+                <!-- Simple SVG Graph for progress -->
+                <div class="bg-panelBg border border-borderBg p-5 rounded-2xl">
+                    <h3 class="font-bold text-white text-sm mb-4">Discipline Journey Curve</h3>
+                    <div class="h-48 relative border border-borderBg/50 rounded-xl bg-darkBg" id="svg-graph-container">
+                        <!-- SVG dynamically populated -->
+                    </div>
+                    <div class="flex justify-between text-[10px] text-gray-500 mt-2 px-1">
+                        <span>Day 1</span>
+                        <span>Day 90</span>
+                        <span>Day 180</span>
+                        <span>Day 270</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 4: SETTINGS / SYSTEMS -->
+            <div id="tab-settings" class="hidden space-y-6">
+                <div class="bg-panelBg border border-borderBg p-6 rounded-2xl space-y-6">
+                    <h3 class="text-base font-bold text-white border-b border-borderBg pb-3">Systems & Date Calibration</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-gray-400 font-semibold mb-1">Monk Mode Start Date</label>
+                            <input type="date" id="settings-start-date" class="w-full bg-darkBg text-white border border-borderBg rounded-lg px-3 py-2 text-xs" onchange="updateStartDate(this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 font-semibold mb-1">Import JSON Backup</label>
+                            <label class="w-full block bg-brand-300 text-black text-center font-bold rounded-lg px-3 py-2 text-xs cursor-pointer">
+                                <i class="fa-solid fa-upload mr-1"></i> Upload Backup file
+                                <input type="file" id="import-backup-file" accept=".json" class="hidden" onchange="importBackup(event)">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-borderBg text-center">
+                        <button onclick="confirmReset()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg">
+                            Reset All Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Bottom menu for iOS/iPads -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 border-t border-borderBg bg-panelBg/95 backdrop-blur z-50 flex justify-around py-3">
+        <button onclick="switchTab('grid')" id="mobile-tab-grid" class="flex flex-col items-center text-brand-300">
+            <i class="fa-solid fa-border-all text-base"></i>
+            <span class="text-[9px] font-bold mt-0.5">270 Grid</span>
+        </button>
+        <button onclick="switchTab('journal')" id="mobile-tab-journal" class="flex flex-col items-center text-gray-400">
+            <i class="fa-solid fa-pen-to-square text-base"></i>
+            <span class="text-[9px] font-bold mt-0.5">Planner</span>
+        </button>
+        <button onclick="switchTab('analytics')" id="mobile-tab-analytics" class="flex flex-col items-center text-gray-400">
+            <i class="fa-solid fa-chart-line text-base"></i>
+            <span class="text-[9px] font-bold mt-0.5">Stats</span>
+        </button>
+        <button onclick="switchTab('settings')" id="mobile-tab-settings" class="flex flex-col items-center text-gray-400">
+            <i class="fa-solid fa-cog text-base"></i>
+            <span class="text-[9px] font-bold mt-0.5">Settings</span>
+        </button>
+    </nav>
+
+    <!-- Toast elements -->
+    <div id="toast" class="fixed top-20 right-6 z-[100] transform translate-y-2 opacity-0 pointer-events-none transition duration-300 bg-brand-300 text-black px-4 py-2.5 rounded-xl shadow-lg flex items-center space-x-2 font-bold text-xs">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toast-message">Success!</span>
+    </div>
+
+    <!-- Confirm dialog -->
+    <div id="confirm-modal" class="fixed inset-0 z-[110] bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-panelBg border border-borderBg p-5 rounded-2xl max-w-xs w-full space-y-4 text-center">
+            <h4 class="font-bold text-sm text-white" id="confirm-title">Are you sure?</h4>
+            <p class="text-xs text-gray-400 leading-relaxed" id="confirm-desc">This action will delete your database.</p>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeConfirmModal(false)" class="flex-1 py-2 rounded-lg border border-borderBg text-xs font-semibold text-gray-400">Cancel</button>
+                <button onclick="closeConfirmModal(true)" id="confirm-ok-btn" class="flex-1 py-2 rounded-lg bg-red-600 text-xs font-bold text-white">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DEFAULT_COVER = "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80";
+        let activeTab = 'grid';
+        let currentDayNum = 1;
+        let selectedPhaseFilter = 'all';
+
+        let journalState = {
+            startDate: '2026-07-01',
+            coverPhoto: DEFAULT_COVER,
+            days: {}
+        };
+
+        let confirmResolver = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStateFromMemory();
+            initializeDaysGrid();
+            refreshDashboardAndUI();
+            
+            document.getElementById('settings-start-date').value = journalState.startDate;
+            
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.error(err));
+            }
+        });
+
+        function loadStateFromMemory() {
+            const saved = localStorage.getItem('mission_270_journal');
+            if (saved) {
+                try {
+                    journalState = JSON.parse(saved);
+                } catch (e) {}
+            }
+
+            for (let i = 1; i <= 270; i++) {
+                const key = `day-${i}`;
+                if (!journalState.days[key]) {
+                    journalState.days[key] = {
+                        completed: false,
+                        mornWake: false, mornEltroxin: false, mornWater: false, mornWeight: false, mornStretch: false,
+                        studyS1: false, studyS2: false, studyS3: false, studyRev: false, studyTopics: "",
+                        gymWorkout: false, gymStrength: false, gymCardio: false, gymSteps: false, gymNotes: "",
+                        nutWhey: false, nutCreatine: false, nutProtein: false, nutCalories: false, meal1: "", meal2: "",
+                        spirPuja: false, spirNaam: false, spirGratitude: false,
+                        digNoSocial: false, digSmartphone: false,
+                        nightDinner: false, nightWalk: false, nightRev: false, nightPlan: false, nightSleep: false,
+                        weight: null, waist: null, steps: null, studyHrs: null, water: null, calories: null, discipline: 10, sleep: null,
+                        prio1: "", prio2: "", prio3: "", reflection: ""
+                    };
+                }
+            }
+
+            if (journalState.coverPhoto) {
+                document.getElementById('cover-photo').src = journalState.coverPhoto;
+            }
+        }
+
+        function persistState() {
+            localStorage.setItem('mission_270_journal', JSON.stringify(journalState));
+        }
+
+        function initializeDaysGrid() {
+            const container = document.getElementById('days-grid-container');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= 270; i++) {
+                const data = journalState.days[`day-${i}`];
+                const card = document.createElement('button');
+                card.id = `grid-card-${i}`;
+                card.className = `p-2 rounded-lg border text-center transition-all h-14 flex flex-col items-center justify-center cursor-pointer ${getDayCardStyles(i, data)}`;
+                
+                card.onclick = () => {
+                    currentDayNum = i;
+                    switchTab('journal');
+                };
+
+                card.innerHTML = `
+                    <span class="text-[8px] text-gray-500 block leading-none">DAY</span>
+                    <span class="text-xs font-black block leading-none mt-0.5 ${data.completed ? 'text-black' : 'text-white'}">${i}</span>
+                `;
+                container.appendChild(card);
+            }
+        }
+
+        function getDayCardStyles(i, data) {
+            if (data.completed) {
+                return "bg-brand-300 border-brand-300 text-black font-bold";
+            }
+            if (data.reflection.trim().length > 0 || data.gymWorkout || data.studyS1) {
+                return "bg-yellow-500/10 border-yellow-500/30";
+            }
+            return "bg-neutral-900 border-neutral-800 hover:border-neutral-700";
+        }
+
+        function switchTab(target) {
+            activeTab = target;
+            document.getElementById('tab-grid').classList.add('hidden');
+            document.getElementById('tab-journal').classList.add('hidden');
+            document.getElementById('tab-analytics').classList.add('hidden');
+            document.getElementById('tab-settings').classList.add('hidden');
+
+            const btns = ['grid', 'journal', 'analytics'];
+            btns.forEach(b => {
+                const el = document.getElementById(`tab-btn-${b}`);
+                if (el) el.className = "flex-1 py-2 rounded-lg font-semibold text-xs transition-all flex items-center justify-center space-x-1.5 text-gray-400 hover:text-white";
+            });
+
+            if (target === 'grid') {
+                document.getElementById('tab-grid').classList.remove('hidden');
+                document.getElementById('tab-btn-grid').className = "flex-1 py-2 rounded-lg font-semibold text-xs transition-all flex items-center justify-center space-x-1.5 bg-neutral-900 text-brand-300 shadow";
+            } else if (target === 'journal') {
+                document.getElementById('tab-journal').classList.remove('hidden');
+                document.getElementById('tab-btn-journal').className = "flex-1 py-2 rounded-lg font-semibold text-xs transition-all flex items-center justify-center space-x-1.5 bg-neutral-900 text-brand-300 shadow";
+                loadDayIntoJournalEditor(currentDayNum);
+            } else if (target === 'analytics') {
+                document.getElementById('tab-analytics').classList.remove('hidden');
+                document.getElementById('tab-btn-analytics').className = "flex-1 py-2 rounded-lg font-semibold text-xs transition-all flex items-center justify-center space-x-1.5 bg-neutral-900 text-brand-300 shadow";
+                renderAnalyticsView();
+            } else if (target === 'settings') {
+                document.getElementById('tab-settings').classList.remove('hidden');
+            }
+
+            // Sync Mobile navigation
+            const mobileTabs = ['grid', 'journal', 'analytics', 'settings'];
+            mobileTabs.forEach(t => {
+                const el = document.getElementById(`mobile-tab-${t}`);
+                if (el) el.className = t === target ? "flex flex-col items-center text-brand-300" : "flex flex-col items-center text-gray-400";
+            });
+        }
+
+        function filterPhase(phase) {
+            selectedPhaseFilter = phase;
+            const btns = ['all', 'p1', 'p2', 'p3'];
+            btns.forEach(b => {
+                const el = document.getElementById(`phase-btn-${b}`);
+                if (b === phase) {
+                    el.className = "px-2.5 py-1 rounded bg-brand-300 text-black text-[10px] font-bold";
+                } else {
+                    el.className = "px-2.5 py-1 rounded bg-neutral-900 text-gray-400 text-[10px]";
+                }
+            });
+
+            for (let i = 1; i <= 270; i++) {
+                const card = document.getElementById(`grid-card-${i}`);
+                if (!card) continue;
+                if (phase === 'all') card.style.display = 'flex';
+                else if (phase === 'p1') card.style.display = (i >= 1 && i <= 90) ? 'flex' : 'none';
+                else if (phase === 'p2') card.style.display = (i >= 91 && i <= 180) ? 'flex' : 'none';
+                else if (phase === 'p3') card.style.display = (i >= 181 && i <= 270) ? 'flex' : 'none';
+            }
+        }
+
+        function calculateDateForDay(dayNumber) {
+            const baseDate = new Date(journalState.startDate);
+            baseDate.setDate(baseDate.getDate() + (dayNumber - 1));
+            return baseDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function loadDayIntoJournalEditor(dayNum) {
+            const data = journalState.days[`day-${dayNum}`];
+            document.getElementById('active-day-num').textContent = dayNum;
+            document.getElementById('active-day-date').textContent = calculateDateForDay(dayNum);
+
+            // Morning
+            document.getElementById('morn-wake').checked = data.mornWake;
+            document.getElementById('morn-eltroxin').checked = data.mornEltroxin;
+            document.getElementById('morn-water').checked = data.mornWater;
+            document.getElementById('morn-weight').checked = data.mornWeight;
+            document.getElementById('morn-stretch').checked = data.mornStretch;
+
+            // Study
+            document.getElementById('study-s1').checked = data.studyS1;
+            document.getElementById('study-s2').checked = data.studyS2;
+            document.getElementById('study-s3').checked = data.studyS3;
+            document.getElementById('study-rev').checked = data.studyRev;
+            document.getElementById('study-topics').value = data.studyTopics;
+
+            // Gym
+            document.getElementById('gym-workout').checked = data.gymWorkout;
+            document.getElementById('gym-strength').checked = data.gymStrength;
+            document.getElementById('gym-cardio').checked = data.gymCardio;
+            document.getElementById('gym-steps').checked = data.gymSteps;
+            document.getElementById('gym-notes').value = data.gymNotes;
+
+            // Nutrition
+            document.getElementById('nut-whey').checked = data.nutWhey;
+            document.getElementById('nut-creatine').checked = data.nutCreatine;
+            document.getElementById('nut-protein').checked = data.nutProtein;
+            document.getElementById('nut-calories').checked = data.nutCalories;
+            document.getElementById('meal-1').value = data.meal1;
+            document.getElementById('meal-2').value = data.meal2;
+
+            // Spiritual / Digital
+            document.getElementById('spir-puja').checked = data.spirPuja;
+            document.getElementById('spir-naam').checked = data.spirNaam;
+            document.getElementById('spir-gratitude').checked = data.spirGratitude;
+            document.getElementById('dig-no-social').checked = data.digNoSocial;
+            document.getElementById('dig-smartphone').checked = data.digSmartphone;
+
+            // Night
+            document.getElementById('night-dinner').checked = data.nightDinner;
+            document.getElementById('night-walk').checked = data.nightWalk;
+            document.getElementById('night-rev').checked = data.nightRev;
+            document.getElementById('night-plan').checked = data.nightPlan;
+            document.getElementById('night-sleep').checked = data.nightSleep;
+
+            // Metrics
+            document.getElementById('met-weight').value = data.weight || '';
+            document.getElementById('met-waist').value = data.waist || '';
+            document.getElementById('met-steps').value = data.steps || '';
+            document.getElementById('met-study-hrs').value = data.studyHrs || '';
+            document.getElementById('met-water').value = data.water || '';
+            document.getElementById('met-calories').value = data.calories || '';
+            document.getElementById('met-discipline').value = data.discipline || 10;
+            document.getElementById('met-sleep').value = data.sleep || '';
+
+            // Priorities / Note
+            document.getElementById('prio-1').value = data.prio1;
+            document.getElementById('prio-2').value = data.prio2;
+            document.getElementById('prio-3').value = data.prio3;
+            document.getElementById('reflection-box').value = data.reflection;
+
+            const completeBtn = document.getElementById('complete-day-btn');
+            if (data.completed) {
+                completeBtn.className = "px-5 py-2.5 bg-neutral-800 text-brand-300 text-xs font-black rounded-lg uppercase tracking-wider";
+                completeBtn.textContent = "Completed √";
+            } else {
+                completeBtn.className = "px-5 py-2.5 bg-brand-300 text-black text-xs font-black rounded-lg uppercase tracking-wider hover:bg-brand-400 shadow-md transition";
+                completeBtn.textContent = "Save & Complete Day";
+            }
+        }
+
+        function autoSaveCurrentDay() {
+            const data = journalState.days[`day-${currentDayNum}`];
+
+            data.mornWake = document.getElementById('morn-wake').checked;
+            data.mornEltroxin = document.getElementById('morn-eltroxin').checked;
+            data.mornWater = document.getElementById('morn-water').checked;
+            data.mornWeight = document.getElementById('morn-weight').checked;
+            data.mornStretch = document.getElementById('morn-stretch').checked;
+
+            data.studyS1 = document.getElementById('study-s1').checked;
+            data.studyS2 = document.getElementById('study-s2').checked;
+            data.studyS3 = document.getElementById('study-s3').checked;
+            data.studyRev = document.getElementById('study-rev').checked;
+            data.studyTopics = document.getElementById('study-topics').value;
+
+            data.gymWorkout = document.getElementById('gym-workout').checked;
+            data.gymStrength = document.getElementById('gym-strength').checked;
+            data.gymCardio = document.getElementById('gym-cardio').checked;
+            data.gymSteps = document.getElementById('gym-steps').checked;
+            data.gymNotes = document.getElementById('gym-notes').value;
+
+            data.nutWhey = document.getElementById('nut-whey').checked;
+            data.nutCreatine = document.getElementById('nut-creatine').checked;
+            data.nutProtein = document.getElementById('nut-protein').checked;
+            data.nutCalories = document.getElementById('nut-calories').checked;
+            data.meal1 = document.getElementById('meal-1').value;
+            data.meal2 = document.getElementById('meal-2').value;
+
+            data.spirPuja = document.getElementById('spir-puja').checked;
+            data.spirNaam = document.getElementById('spir-naam').checked;
+            data.spirGratitude = document.getElementById('spir-gratitude').checked;
+            data.digNoSocial = document.getElementById('dig-no-social').checked;
+            data.digSmartphone = document.getElementById('dig-smartphone').checked;
+
+            data.nightDinner = document.getElementById('night-dinner').checked;
+            data.nightWalk = document.getElementById('night-walk').checked;
+            data.nightRev = document.getElementById('night-rev').checked;
+            data.nightPlan = document.getElementById('night-plan').checked;
+            data.nightSleep = document.getElementById('night-sleep').checked;
+
+            data.weight = parseFloat(document.getElementById('met-weight').value) || null;
+            data.waist = parseFloat(document.getElementById('met-waist').value) || null;
+            data.steps = parseInt(document.getElementById('met-steps').value) || null;
+            data.studyHrs = parseFloat(document.getElementById('met-study-hrs').value) || null;
+            data.water = parseFloat(document.getElementById('met-water').value) || null;
+            data.calories = parseInt(document.getElementById('met-calories').value) || null;
+            data.discipline = parseInt(document.getElementById('met-discipline').value) || 10;
+            data.sleep = parseFloat(document.getElementById('met-sleep').value) || null;
+
+            data.prio1 = document.getElementById('prio-1').value;
+            data.prio2 = document.getElementById('prio-2').value;
+            data.prio3 = document.getElementById('prio-3').value;
+            data.reflection = document.getElementById('reflection-box').value;
+
+            persistState();
+
+            const status = document.getElementById('save-status');
+            status.textContent = "Auto-saving...";
+            setTimeout(() => { status.textContent = "Saved to storage"; }, 600);
+
+            const card = document.getElementById(`grid-card-${currentDayNum}`);
+            if (card) {
+                card.className = `p-2 rounded-lg border text-center transition-all h-14 flex flex-col items-center justify-center cursor-pointer ${getDayCardStyles(currentDayNum, data)}`;
+            }
+        }
+
+        function markDayCompleted() {
+            const data = journalState.days[`day-${currentDayNum}`];
+            data.completed = !data.completed;
+            autoSaveCurrentDay();
+            refreshDashboardAndUI();
+            loadDayIntoJournalEditor(currentDayNum);
+            showToast(data.completed ? `Day ${currentDayNum} Marked Completed!` : `Day ${currentDayNum} Reset.`);
+        }
+
+        function navigateDay(offset) {
+            const target = currentDayNum + offset;
+            if (target >= 1 && target <= 270) {
+                currentDayNum = target;
+                loadDayIntoJournalEditor(currentDayNum);
+            }
+        }
+
+        function refreshDashboardAndUI() {
+            let completeCount = 0;
+            for (let i = 1; i <= 270; i++) {
+                if (journalState.days[`day-${i}`].completed) completeCount++;
+            }
+            document.getElementById('header-progress-text').textContent = `${completeCount} / 270 Days`;
+            document.getElementById('header-streak-text').textContent = `${completeCount} Days`;
+        }
+
+        function renderAnalyticsView() {
+            let gymDays = 0, studyDays = 0, discTotal = 0, logged = 0;
+            let points = [];
+
+            for (let i = 1; i <= 270; i++) {
+                const data = journalState.days[`day-${i}`];
+                if (data.gymWorkout) gymDays++;
+                if (data.studyHrs >= 10) studyDays++;
+                
+                if (data.completed) {
+                    discTotal += data.discipline;
+                    logged++;
+                }
+
+                if (i % 30 === 0) {
+                    points.push({ x: i, y: data.discipline });
+                }
+            }
+
+            document.getElementById('perf-gym-count').textContent = `${gymDays} Days`;
+            document.getElementById('perf-study-count').textContent = `${studyDays} Days`;
+            document.getElementById('perf-avg-discipline').textContent = logged > 0 ? `${(discTotal/logged).toFixed(1)} / 10` : '10 / 10';
+
+            // Draw SVG
+            const graph = document.getElementById('svg-graph-container');
+            const width = graph.clientWidth || 400;
+            const height = graph.clientHeight || 180;
+            
+            let dPath = `M 0 ${height/2}`;
+            points.forEach((p, idx) => {
+                const px = (p.x / 270) * width;
+                const py = height - ((p.y / 10) * height);
+                if (idx === 0) dPath = `M ${px} ${py}`;
+                else dPath += ` L ${px} ${py}`;
+            });
+
+            graph.innerHTML = `
+                <svg width="100%" height="100%" class="overflow-visible">
+                    <path d="${dPath}" fill="none" stroke="#deff9a" stroke-width="2.5" />
+                    ${points.map(p => `
+                        <circle cx="${(p.x/270)*width}" cy="${height - ((p.y/10)*height)}" r="4" fill="#deff9a" />
+                        <text x="${(p.x/270)*width}" y="${height - ((p.y/10)*height) - 8}" fill="#deff9a" font-size="8" text-anchor="middle">${p.y}</text>
+                    `).join('')}
+                </svg>
+            `;
+        }
+
+        function updateStartDate(val) {
+            journalState.startDate = val;
+            persistState();
+            loadDayIntoJournalEditor(currentDayNum);
+            showToast("Date recalculated!");
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                journalState.coverPhoto = e.target.result;
+                persistState();
+                document.getElementById('cover-photo').src = e.target.result;
+                showToast("Cover Photo changed successfully!");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function exportBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(journalState, null, 2));
+            const dl = document.createElement('a');
+            dl.setAttribute("href", dataStr);
+            dl.setAttribute("download", `monk_mode_270_backup.json`);
+            dl.click();
+            showToast("Backup exported!");
+        }
+
+        function importBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed && parsed.days) {
+                        journalState = parsed;
+                        persistState();
+                        initializeDaysGrid();
+                        refreshDashboardAndUI();
+                        showToast("Backup Restored!");
+                        switchTab('grid');
+                    }
+                } catch(err) {
+                    showToast("Invalid backup file.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showToast(msg) {
+            const el = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            el.className = "fixed top-20 right-6 z-[100] transform translate-y-0 opacity-100 transition duration-300 bg-brand-300 text-black px-4 py-2.5 rounded-xl shadow-lg flex items-center space-x-2 font-bold text-xs";
+            setTimeout(() => {
+                el.className = "fixed top-20 right-6 z-[100] transform translate-y-2 opacity-0 pointer-events-none transition duration-300 bg-brand-300 text-black px-4 py-2.5 rounded-xl shadow-lg flex items-center space-x-2 font-bold text-xs";
+            }, 2500);
+        }
+
+        function showConfirmModal(title, desc) {
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-desc').textContent = desc;
+            document.getElementById('confirm-modal').classList.remove('hidden');
+            document.getElementById('confirm-modal').classList.add('flex');
+            return new Promise((res) => { confirmResolver = res; });
+        }
+
+        function closeConfirmModal(val) {
+            document.getElementById('confirm-modal').classList.remove('flex');
+            document.getElementById('confirm-modal').classList.add('hidden');
+            if (confirmResolver) confirmResolver(val);
+        }
+
+        async function confirmReset() {
+            const yes = await showConfirmModal("Reset Database?", "This will delete all 270 days logs.");
+            if (yes) {
+                localStorage.removeItem('mission_270_journal');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
+
+```
